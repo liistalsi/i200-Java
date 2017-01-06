@@ -1,0 +1,2 @@
+# Ajatsoonikalkulaator
+Java projekt

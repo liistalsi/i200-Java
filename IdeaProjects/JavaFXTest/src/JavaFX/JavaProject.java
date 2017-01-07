@@ -10,10 +10,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -89,30 +87,11 @@ public class JavaProject extends Application{
                 LocalTime now1 = null;
                 LocalTime now2 = null;
 
-                /*
-                   Converts all the input to lowercase and gives the result to now1 and now2
-                 */
-
-                for (String city : zoneList) {
-
-                      if (city.toLowerCase().contains(formattedCurrentLocation.toLowerCase())) {
-
-                        ZoneId zone1 = ZoneId.of(city);
-                        now1 = LocalTime.now(zone1);
-                      }
-                }
-
-                for (String city : zoneList) {
-
-                    if (city.toLowerCase().contains(formattedTargetLocation.toLowerCase())) {
-
-                        ZoneId zone2 = ZoneId.of(city);
-                        now2 = LocalTime.now(zone2);
-                    }
-                }
+                now1 = getTime(formattedCurrentLocation, zoneList);
+                now2 = getTime(formattedTargetLocation, zoneList);
 
                 /*
-                  Input validation, if data doesn't make any sense, show new error message
+                  Input validation, if user data doesn't make any sense, show new error message. If all good, show result.
                  */
 
                 if (now1 != null && now2 != null) {
@@ -120,9 +99,6 @@ public class JavaProject extends Application{
                     outcome.setText("\nTime in your city of " + CurrentLocation + " is "
                             + now1.toString().substring(0, 5) + " \nand\n" + "time in the target city of " + TargetLocation + " is "
                             + now2.toString().substring(0, 5));
-
-                    now1 = null;
-                    now2 = null;
 
                 } else {
 
@@ -138,5 +114,23 @@ public class JavaProject extends Application{
 
         vbox.getChildren().addAll(location, locationField, time, timeField, target, targetField, submitButton, outcome);
 
+    }
+    /*
+    * Checks if the city is in the zoneList, converts everything to lower cases and assigns the result to now1 and now2
+    */
+    public static LocalTime getTime(String location, List<String> zoneList) {
+
+        LocalTime Time = null;
+
+        for (String city : zoneList) {
+            
+            if (city.toLowerCase().contains(location.toLowerCase())) {
+
+                ZoneId zone = ZoneId.of(city);
+                Time = LocalTime.now(zone);
+            }
+        }
+
+        return Time;
     }
 }

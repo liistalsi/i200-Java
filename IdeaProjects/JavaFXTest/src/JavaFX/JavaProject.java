@@ -22,6 +22,7 @@ import java.util.Set;
 /**
  * Created by ltalsi on 23.10.2016.
  */
+
 public class JavaProject extends Application{
 
 
@@ -29,8 +30,12 @@ public class JavaProject extends Application{
     public void start(Stage primaryStage) throws Exception {
 
         Set<String> allZones = ZoneId.getAvailableZoneIds();
-        List<String> zoneList = new ArrayList<String>(allZones);
+        List<String> zoneList = new ArrayList(allZones);
         Collections.sort(zoneList);
+
+        /*
+          Defining main project window settings
+         */
 
         VBox vbox = new VBox();
         vbox.setSpacing(10);
@@ -59,6 +64,10 @@ public class JavaProject extends Application{
             String CurrentLocation = locationField.getText();
             String TargetLocation = targetField.getText();
 
+            /*
+               Input validation, if input is empty then show error, if not then proceed
+             */
+
             if (CurrentLocation.equals("") || TargetLocation.equals("")) {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -70,13 +79,21 @@ public class JavaProject extends Application{
 
             } else {
 
+                /*
+                   Input validation, if City is entered with ' ' converts it to '_'
+                 */
+
                 String formattedCurrentLocation = CurrentLocation.replace(' ', '_');
                 String formattedTargetLocation = TargetLocation.replace(' ', '_');
 
                 LocalTime now1 = null;
                 LocalTime now2 = null;
 
-                  for (String city : zoneList) {
+                /*
+                   Converts all the input to lowercase and gives the result to now1 and now2
+                 */
+
+                for (String city : zoneList) {
 
                       if (city.toLowerCase().contains(formattedCurrentLocation.toLowerCase())) {
 
@@ -93,6 +110,10 @@ public class JavaProject extends Application{
                         now2 = LocalTime.now(zone2);
                     }
                 }
+
+                /*
+                  Input validation, if data doesn't make any sense, show new error message
+                 */
 
                 if (now1 != null && now2 != null) {
 

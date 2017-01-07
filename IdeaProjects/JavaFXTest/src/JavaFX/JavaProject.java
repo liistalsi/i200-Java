@@ -1,7 +1,9 @@
 package JavaFX;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -31,6 +33,8 @@ public class JavaProject extends Application{
         Collections.sort(zoneList);
 
         VBox vbox = new VBox();
+        vbox.setSpacing(10);
+        vbox.setPadding(new Insets(30, 30, 30, 30));
         Scene timeConverter = new Scene(vbox, 600, 500);
         primaryStage.setScene(timeConverter);
         primaryStage.show();
@@ -47,44 +51,71 @@ public class JavaProject extends Application{
         TextField targetField = new TextField();
         targetField.setPromptText("Target destination");
 
+        Label outcome = new Label ("");
+
         Button submitButton = new Button("Calculate!");
         submitButton.setOnAction((event) -> {
 
             String CurrentLocation = locationField.getText();
             String TargetLocation = targetField.getText();
 
-            LocalTime now1 = null;
-            LocalTime now2 = null;
+            if (CurrentLocation.equals("") || TargetLocation.equals("")) {
 
-            LocalDateTime dt = LocalDateTime.now();
-            for (String city : zoneList) {
-                ZoneId zone = ZoneId.of(city);
-                ZonedDateTime zdt = dt.atZone(zone);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Whoops! Something went wrong!");
+                alert.setHeaderText("No such City available!");
+                alert.setContentText("Please make sure you entered two Cities.");
 
-                if (city.contains(CurrentLocation)) {
+                alert.showAndWait();
 
-                    ZoneId zone1 = ZoneId.of(city);
-                    now1 = LocalTime.now(zone1);
+            } else {
+
+                String formattedCurrentLocation = CurrentLocation.replace(' ', '_');
+                String formattedTargetLocation = TargetLocation.replace(' ', '_');
+
+                LocalTime now1 = null;
+                LocalTime now2 = null;
+
+                  for (String city : zoneList) {
+
+                      if (city.toLowerCase().contains(formattedCurrentLocation.toLowerCase())) {
+
+                        ZoneId zone1 = ZoneId.of(city);
+                        now1 = LocalTime.now(zone1);
+                      }
+                }
+
+                for (String city : zoneList) {
+
+                    if (city.toLowerCase().contains(formattedTargetLocation.toLowerCase())) {
+
+                        ZoneId zone2 = ZoneId.of(city);
+                        now2 = LocalTime.now(zone2);
+                    }
+                }
+
+                if (now1 != null && now2 != null) {
+
+                    outcome.setText("\nTime in your city of " + CurrentLocation + " is "
+                            + now1.toString().substring(0, 5) + " \nand\n" + "time in the target city of " + TargetLocation + " is "
+                            + now2.toString().substring(0, 5));
+
+                    now1 = null;
+                    now2 = null;
+
+                } else {
+
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Whoops! Something went wrong!");
+                    alert.setHeaderText("No such City available!");
+                    alert.setContentText("Please enter new/other Cities.");
+
+                    alert.showAndWait();
                 }
             }
-
-            for (String city : zoneList) {
-                ZoneId zone = ZoneId.of(city);
-                ZonedDateTime zdt = dt.atZone(zone);
-
-                if (city.contains(TargetLocation)) {
-
-                    ZoneId zone2 = ZoneId.of(city);
-                    now2 = LocalTime.now(zone2);
-                }
-            }
-
-            System.out.println("Time in your city of " + CurrentLocation + " is " + now1.toString().substring(0, 5));
-            System.out.println("and");
-            System.out.println("Time in the target city of " + TargetLocation + " is " + now2.toString().substring(0, 5));
         });
 
-        vbox.getChildren().addAll(location, locationField, time, timeField, target, targetField, submitButton);
+        vbox.getChildren().addAll(location, locationField, time, timeField, target, targetField, submitButton, outcome);
 
     }
 }

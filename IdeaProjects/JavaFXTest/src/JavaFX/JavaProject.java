@@ -17,6 +17,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import static javafx.scene.control.Alert.AlertType.ERROR;
+
 /**
  * Created by ltalsi on 23.10.2016.
  */
@@ -73,12 +75,7 @@ public class JavaProject extends Application{
 
             if (CurrentLocation.equals("") || TargetLocation.equals("")) {
 
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Whoops! Something went wrong!");
-                alert.setHeaderText("No such City available!");
-                alert.setContentText("Please make sure you entered two Cities.");
-
-                alert.showAndWait();
+                ShowAlert(ERROR, "Whoops! Something went wrong!", "You probably missed a field or two!", "Please make sure you entered TWO Cities.");
 
             } else {
 
@@ -107,12 +104,7 @@ public class JavaProject extends Application{
 
                 } else {
 
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Whoops! Something went wrong!");
-                    alert.setHeaderText("No such City available!");
-                    alert.setContentText("Please enter new/other Cities.");
-
-                    alert.showAndWait();
+                    ShowAlert(ERROR, "Whoops! Something went wrong!", "No such City available!", "Please enter new/other Cities.");
                 }
             }
         });
@@ -137,5 +129,19 @@ public class JavaProject extends Application{
         }
 
         return Time;
+    }
+
+    /*
+    * Error message method
+    */
+
+    public void ShowAlert(Alert.AlertType Type, String TitleText, String HeaderText, String ContentText) {
+
+        Alert alert = new Alert(Type);
+        alert.setTitle(TitleText);
+        alert.setHeaderText(HeaderText);
+        alert.setContentText(ContentText);
+
+        alert.showAndWait();
     }
 }

@@ -27,6 +27,10 @@ public class JavaProject extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+        /*
+          Assigning values to the variables to get the list of all zones available in the ZoneId class
+         */
+
         Set<String> allZones = ZoneId.getAvailableZoneIds();
         List<String> zoneList = new ArrayList(allZones);
         Collections.sort(zoneList);
@@ -38,6 +42,7 @@ public class JavaProject extends Application{
         VBox vbox = new VBox();
         vbox.setSpacing(10);
         vbox.setPadding(new Insets(30, 30, 30, 30));
+
         Scene timeConverter = new Scene(vbox, 600, 500);
         primaryStage.setScene(timeConverter);
         primaryStage.show();
@@ -116,7 +121,7 @@ public class JavaProject extends Application{
 
     }
     /*
-    * Checks if the city is in the zoneList, converts everything to lower cases and assigns the result to now1 and now2
+    * Checks if the city is in the zoneList and returns Time
     */
     public static LocalTime getTime(String location, List<String> zoneList) {
 

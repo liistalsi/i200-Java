@@ -43,6 +43,11 @@ public class Kellad extends Dashboard {
         clockContainer.setAlignment(Pos.CENTER);
         clockContainer.setSpacing(30);
 
+        /*
+        Calculates the number of cities in the String array.
+        Empty spots are null.
+         */
+
         int locationsRealLength = 0;
 
         for (int i = 0; i < locations.length; i++) {
@@ -50,6 +55,12 @@ public class Kellad extends Dashboard {
                 locationsRealLength++;
             }
         }
+
+        /*
+        Generates separate VBoxes for each real city.
+        Generates relevant Labels inside each of the VBoxes
+        Adds a Timer for each city that updates the time in real time every 100 ms
+         */
 
         for (int i = 0; i < locationsRealLength; i++) {
 
@@ -67,12 +78,23 @@ public class Kellad extends Dashboard {
             clockObject.setStyle("-fx-background-color: rgba(255, 255, 255, 0.1);");
             clockObject.setPadding(new Insets(20, 20, 20, 20));
 
+            /*
+            Send the location with empty time property to the Hashmap for later use
+             */
+
             timesAndLocations.put(location, new SimpleStringProperty(""));
 
             clockObject.getChildren().addAll(locationLabel, timeLabel, userTimeLabel, periodLabel);
             clockContainer.getChildren().add(clockObject);
 
             userTimeLabel.textProperty().bindBidirectional(timesAndLocations.get(location));
+
+            /*
+            Starts one Timer for each city
+            Stops all the timers once the timersShouldStop boolean changes to true and purges them
+            Hides the initial time labels once the timersShouldStop boolean changes to true
+            and shows the other set of labels that hold the user selected time values
+             */
 
             Timer timer = new Timer();
             timer.scheduleAtFixedRate(new TimerTask() {
